@@ -4,10 +4,6 @@
 #include <algorithm> 
 #include <sys/time.h>
 
-//-------------------------------------------------------------
-// Función para obtener el tiempo actual en segundos
-// (sirve para medir el tiempo de ejecución del programa)
-//-------------------------------------------------------------
 double seconds()
 {
   struct timeval tmp;
@@ -17,13 +13,7 @@ double seconds()
   
   return sec;
 }
-//-------------------------------------------------------------
-// Función que llena el centro de la matriz con temperatura 100.0
-// Parámetros:
-//   Nx, Ny         -> dimensiones de la matriz
-//   centro_medios  -> tamaño del cuadrado central
-//   current        -> puntero a la matriz actual
-//-------------------------------------------------------------
+
 int llenar_centro( int Nx, int Ny, double centro_medios, double *current){
   for(int i = ((Nx/2)-centro_medios);i<(Nx/2)+centro_medios;++i) {
     for(int j =(Ny/2)-centro_medios;j<((Ny/2)+centro_medios);++j) {
@@ -33,18 +23,6 @@ int llenar_centro( int Nx, int Ny, double centro_medios, double *current){
   return 0;
 }
 
-
-//-------------------------------------------------------------
-// Función que recalcula los valores de temperatura (difusión térmica)
-// usando un esquema explícito en diferencias finitas.
-// Parámetros:
-//   Nx, Ny -> dimensiones de la matriz
-//   current -> matriz actual
-//   prox    -> matriz siguiente
-//   alpha   -> coeficiente de difusión
-//   dx, dy  -> tamaño de paso espacial
-//   dt      -> paso de tiempo
-//-------------------------------------------------------------
 int recalcular_matriz( int Nx, int Ny, double *current, double *prox, double alpha, double dx, double dy, double dt){
   // Recorre la matriz (excepto bordes)
   for(int i = 1; i < Nx-1; ++i){
@@ -68,17 +46,7 @@ int recalcular_matriz( int Nx, int Ny, double *current, double *prox, double alp
   return 0;
 }
 
-//-------------------------------------------------------------
-// Función que guarda en un archivo los valores de una matriz 2D con sus coordenadas.
-// Escribe cada elemento en el archivo "data.dat" en el formato: j  i  valor.
-// Se agrega una línea en blanco entre filas para facilitar la visualización.
-// Parámetros:
-//   Nx, Ny  -> dimensiones de la matriz
-//   current -> matriz actual almacenada en un arreglo lineal (orden fila-major)
-// Retorna:
-//   0 si la operación fue exitosa
-//   1 si no se pudo abrir el archivo para escritura
-//-------------------------------------------------------------
+
 int guardar_datos( int Nx, int Ny, double *current){
   std::ofstream fout("data.dat");
   if (!fout.is_open()) {
@@ -97,18 +65,7 @@ int guardar_datos( int Nx, int Ny, double *current){
   return 0;
 }
 
-//-------------------------------------------------------------
-// Función principal que ejecuta la simulación de difusión térmica en 2D.
-// Lee las dimensiones de la matriz y el número de iteraciones desde la línea de comandos.
-// Inicializa el dominio, calcula parámetros físicos (dx, dy, dt) y realiza la evolución temporal
-// aplicando difusión y manteniendo una región caliente en el centro.
-// También mide el tiempo total de la simulación y guarda los resultados finales en un archivo.
-// Parámetros:
-//   argc, argv -> argumentos de entrada: Nx (filas), Ny (columnas), Nt (iteraciones)
-// Retorna:
-//   0 si la ejecución fue correcta
-//   1 si hay error en los argumentos
-//-------------------------------------------------------------
+
 int main(int argc, char* argv[]) {
    // Verifica argumentos de entrada
    if(argc != 4){
